@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validations</title>
+<style>
+    h3{
+        font-weight: bold;
+    }
+.container{
+    display: block;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    font-size: 18PX;
+    padding:20px;
+    text-align:center;
+    width: 100%;
+}
+*{box-sizing: border-box;}
+input{
+    display:flexbox;
+    padding: 5px;
+}    
+button{
+    background-color: green;
+    color: white;
+    display: inline-block; 
+    padding: 5px 15px;
+    border-radius: 8px;   
+}
+.reset{
+background-color: red;
+border-radius: 8px;
+}
+
+table,th,td{
+    border:1px solid black;
+    border-collapse: collapse;
+    border-radius: 5px;
+    padding: 15px;
+}
+tr:nth-child(even){
+background-color: #b3d9ff;
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+<form action="" method="get" autocomplete="on">
+    <h3 style="color:red; text-align: center;" id="animated_h3">EMPLOYEE INFORMATION</h3>
+<label for="fname">FullName: </label>
+<input type="text"  name="fname" size="30" id="fname" ><br><br>
+
+<label for="email">Email ID:</label> 
+<input type="email" name="email" id="email" size="30" ><br><br>
+
+ <label >Gender:</label> 
+ <input type="radio" name="gender" value="Male" id="Male" >
+ <label for="Male">Male</label> 
+ <input type="radio" name="gender" value="Female" id="Female" >
+ <label for="Female">Female</label><br><br>
+
+<label for="mobile">Mobile No.:</label>
+<input type="tel" name="mobile" size="29" id="mobile" ><br><br>
+
+<label for="designation">Designation:</label>
+<select name="designation" id="designation">
+<option value="Accountnt">Accontant</option>
+<option value="HR">HR</option>
+<option value="Programmer">Programmer</option>
+<option value="Frontend developer">Frontend Developer</option>
+<option value="Backend Developer">Backend Developer</option>
+</select><br><br>
+
+<label for="address">Address:</label>
+<input type="text" name="address" size="30" id="address" ><br><br>
+
+<button type="button" onclick="ValidateForm()">Submit</button>
+<button type="reset" name="reset"  value="reset" class="reset" id="reset">Reset</button><br><br>
+
+</form>
+<table style="width:100%" id="datatable">
+    <thead style="background-color: dodgerblue; color: white;">
+    <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Gender</th>
+    <th>Mobile No.</th>
+    <th>Designation</th>
+    <th>Address</th> 
+    </tr> 
+</thead> 
+
+<tbody id="tbody">
+
+</tbody>
+</table>
+</div>
+
+<script>
+ let empArr=[];
+ 
+ function ValidateForm(){
+ let err='';
+
+ let fname=document.getElementById("fname").value;
+ if(fname==""){
+    err+="Please enter your fullname.";
+ }
+
+ let email=document.getElementById("email").value;
+ if(email==""){
+    err+="Please enter your correct Email ID.";
+}
+
+ let gender=document.querySelector('input[name="gender"]:checked');
+ if(!gender){
+    err+="Please choose the correct options.";
+}
+
+ let mobile=document.getElementById("mobile").value;
+ if(mobile==""){
+    err+="Please enter your mobile number.";
+}
+
+ let designation=document.getElementById("designation").value;
+ if(designation==""){
+    err+="Please select your options. ";
+}
+
+ let address=document.getElementById("address").value;
+ if(address==""){
+    err+="Please enter your address.";
+}
+//check the fullname,email & mobile are already exist.
+let existEmployee=empArr.find(employee=>employee.fname===fname);
+if(existEmployee)
+{
+    err+="You are already exist in table.";
+}
+
+let existEEmployee=empArr.find(employee=>employee.email===email);
+if(existEEmployee)
+{
+    err+="Your email id are already exist our sytem.";
+}
+
+let existmobile=empArr.find(employee=>employee.mobile===mobile);
+if(existmobile)
+{
+    err+="Your email id are already exist our sytem.";
+}
+
+//Display the error message
+if(err!=="")
+{
+    alert(err);
+    return false;
+}
+
+//create object 
+let employee={fname, email, gender:gender?gender.value:"", mobile, designation, address};
+
+//add array to the object.
+empArr.push(employee);
+
+//update table
+Updatetable();
+document.getElementById("reset").value;
+}
+
+function Updatetable(){
+let tableBody=document.getElementById("tbody");
+tableBody.innerHTML="";
+
+empArr.forEach(employee=>{
+    let newRow=document.createElement("tr");
+    newRow.innerHTML=
+    `<td>${employee.fname}</td>
+    <td> ${employee.email}</td>
+    <td>${employee.gender}</td>
+    <td>${employee.mobile}</td>
+    <td>${employee.designation}</td>
+    <td>${employee.address}</td>`;
+
+    tableBody.appendChild(newRow);
+});
+}
+
+</script>
+</body>
+</html>

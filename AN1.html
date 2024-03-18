@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validations</title>
+<style>
+    h3{
+        font-weight: bold;
+    }
+.container{
+    display: block;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    /* text-align: justify ; */
+    /* border:5px solid grey; */
+    /* margin-top: 20px; */
+    /* margin-left: 250px; */
+    /* margin-right: 500px; */
+    font-size: 18PX;
+    padding:20px;
+    text-align:center;
+    width: 100%;
+}
+*{box-sizing: border-box;}
+input{
+    display:flexbox;
+    padding: 5px;
+}    
+button{
+    background-color: green;
+    color: white;
+    display: inline-block; 
+    padding: 5px 15px;
+    border-radius: 8px;   
+}
+.reset{
+background-color: red;
+border-radius: 8px;
+}
+
+table,th,td{
+    border:1px solid black;
+    border-collapse: collapse;
+    border-radius: 5px;
+    padding: 15px;
+}
+tr:nth-child(even){
+background-color: #b3d9ff;
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+<form action="" method="get" autocomplete="on">
+    <h3 style="color:chocolate; text-align: center;" id="animated_h3">STUDENT INFORMATION</h3>
+<label for="fname">FullName: </label>
+<input type="text"  name="fname" size="30" id="fname" ><br><br>
+
+<label for="email">Email ID:</label> 
+<input type="email" name="email" id="email" size="30" ><br><br>
+
+ <label >Gender:</label> 
+ <input type="radio" name="gender" value="Male" id="Male" >
+ <label for="Male">Male</label> 
+
+ <input type="radio" name="gender" value="Female" id="Female" >
+ <label for="Female">Female</label> 
+
+  <br><br>
+
+<label for="mobile">Mobile No.:</label>
+<input type="tel" name="mobile" size="29" id="mobile" ><br><br>
+
+<label>Class:</label>
+<input type="checkbox" name="class"  id="BCA" value="BCA" >
+<label for="BCA">BCA</label>
+<input type="checkbox" name="class" id="BBA" value="BBA" >
+<label for="BBA">BBA</label>
+<input type="checkbox" name="class" id="MCA" value="MCA" >
+<label for="MCA">MCA</label>
+<input type="checkbox" name="class" id="MBA" value="MBA" >
+<label for="MBA">MBA</label><br><br>
+
+<label for="address">Address:</label>
+<input type="text" name="address" size="30" id="address" ><br><br>
+
+<button type="button" onclick="ValidateForm()">Submit</button>
+<button type="reset" name="reset"  value="reset" class="reset" id="reset">Reset</button><br><br>
+
+</form>
+<table style="width:100%" id=datatable>
+    <thead style="background-color: dodgerblue; color: white;"><tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Gender</th>
+    <!-- <th>DOB</th> -->
+    <th>Mobile No.</th>
+    <th>Class</th>
+    <th>Address</th> 
+    </tr> </thead> 
+
+<tbody id="tbody">
+<tr>  </tr>
+</tbody>
+    </table>
+
+</div>
+
+<script>
+
+ let myArr=[];
+ 
+ function ValidateForm(){
+ let err='';
+    //get the data and validations of form
+   let fullname=document.getElementById("fname").value;
+    if(fullname=="")
+    {
+      err+="Please enter the valid FullName .";
+    }
+    
+    let email=document.getElementById("email").value;
+    if(email=="")
+    {
+        err+="Please enter the valid EmailID .";
+    }
+    
+    let mobile=document.getElementById("mobile").value;
+    if(mobile=="")
+    {
+        err+="Please enter the valid Mobile Numbers ";
+    }
+    
+    let address=document.getElementById("address").value;
+    if(address=="")
+    {
+        err+="Please enter the valid  home address ";
+    }
+
+    let gender=document.querySelector('input[name="gender"]:checked');
+    if(!gender){
+        err+="You cannot choose the correct radio options ";
+    }
+    
+    let Class=document.querySelectorAll('input[name="class"]:checked');
+    if(Class.length==0)
+    {
+        err+="Please choose the correct class ?";
+    }
+
+    //check the array if fullname already exist in table.
+    let existStudent=myArr.find(student=>student.fullname===fullname);
+    if(existStudent)
+    {
+        err+="You are name already exist in table.";
+    }
+    
+    //check the array if Email already exist in table.
+    let existEStudent=myArr.find(student=>student.email===email);
+    if(existEStudent)
+    {
+        err+="You are Email Id already exist in table."
+    }
+    
+    //check the array if mobile already exist in table.
+    let existMStudent=myArr.find(student=>student.mobile===mobile);
+    if(existMStudent){
+        err+="You are mobile number alredy exist in our tables."
+    }
+
+    //display to check the error.
+    if(err!=="")
+    {   
+        alert(err);
+        return false;
+    }
+
+    //create an object
+     let student={fullname,email,gender:gender ? gender.value :"",mobile, Class:Array.from(Class).map(c=>c.value).join(",") ,address};
+     
+     //add object to array.
+     myArr.push(student);
+
+    //update the table.
+     addTable();
+     myArr[student];
+    document.getElementById("reset").value;
+  
+}
+
+function addTable()
+ {
+    let tableBody=document.getElementById("tbody");
+    tableBody.innerHTML="";
+
+    myArr.forEach(student => {
+        const newRow=document.createElement("tr");
+        
+        const fullnameCell=document.createElement("td");
+        fullnameCell.textContent=student.fullname;
+        newRow.appendChild(fullnameCell);
+
+        const emailCell=document.createElement("td");
+        emailCell.textContent=student.email;
+        newRow.appendChild(emailCell);
+
+        const genderCell=document.createElement("td");
+        genderCell.textContent=student.gender;
+        newRow.appendChild(genderCell);
+
+        const mobileCell=document.createElement("td");
+        mobileCell.textContent=student.mobile;
+        newRow.appendChild(mobileCell);
+   
+        const ClassCell=document.createElement("td");
+        ClassCell.textContent=student.Class;
+        newRow.appendChild(ClassCell);
+
+        const addressCell=document.createElement("td");
+        addressCell.textContent=student.address;
+        newRow.appendChild(addressCell);
+        
+        tableBody.appendChild(newRow);
+    });
+}
+
+
+
+
+</script>
+</body>
+</html>
